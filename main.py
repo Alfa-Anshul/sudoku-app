@@ -2,10 +2,9 @@ from fastapi import FastAPI
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import FileResponse
 from fastapi.middleware.cors import CORSMiddleware
-import random, copy, json
-from typing import Optional
+import random, copy, json as jsonlib
 
-app = FastAPI(title="Sudoku API")
+app = FastAPI(title="Sudoku App")
 
 app.add_middleware(
     CORSMiddleware,
@@ -79,22 +78,8 @@ def get_puzzle(difficulty: str = "medium"):
     puzzle, solution = generate_puzzle(difficulty)
     return {"puzzle": puzzle, "solution": solution, "difficulty": difficulty}
 
-@app.get("/api/validate")
-def validate(board: str):
-    try:
-        b = json.loads(board)
-        for r in range(9):
-            for c in range(9):
-                n = b[r][c]
-                if n == 0: continue
-                b[r][c] = 0
-                if not is_valid(b, r, c, n):
-                    b[r][c] = n
-                    return {"valid": False, "conflict": [r, c]}
-                b[r][c] = n
-        complete = all(b[r][c] != 0 for r in range(9) for c in range(9))
-        return {"valid": True, "complete": complete}
-    except Exception as e:
-        return {"valid": False, "error": str(e)}
+@app.get("/health")
+def health():
+    return {"status": "ok"}
 
 app.mount("/", StaticFiles(directory="static", html=True), name="static")

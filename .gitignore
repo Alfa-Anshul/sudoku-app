@@ -1,0 +1,17 @@
+.env
+.env.*
+*.pem
+*.key
+*.p12
+*.pfx
+*.crt
+*.csr
+*.asc
+.ssh/
+messages.json
+mcp_automation.txt
+mcp_automation.pem
+*token*
+*secret*
+*password*
+*credential*
